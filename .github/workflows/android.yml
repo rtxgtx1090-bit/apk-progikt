@@ -19,19 +19,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Gradle
+      - name: Setup Specific Gradle 8.5
         uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.5'
 
-      - name: Build APK with Wrapper
+      - name: Build APK with Gradle Wrapper
         run: |
-          if [ -f "./gradlew" ]; then
-            chmod +x gradlew
-            ./gradlew assembleDebug
-          else
-            gradle wrapper
-            chmod +x gradlew
-            ./gradlew assembleDebug
-          fi
+          gradle wrapper --gradle-version 8.5
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
