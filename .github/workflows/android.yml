@@ -19,15 +19,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build APK with Gradle
+      - name: Install Gradle and Generate Wrapper
         run: |
-          if [ -f "./gradlew" ]; then
-            chmod +x gradlew
-            ./gradlew assembleDebug
-          else
-            echo "Gradle wrapper not found, running gradle assembleDebug"
-            gradle assembleDebug
+          sudo apt-get update && sudo apt-get install -y gradle
+          if [ ! -f "./gradlew" ]; then
+            gradle wrapper
           fi
+          chmod +x gradlew
+
+      - name: Build APK with Gradle
+        run: ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
